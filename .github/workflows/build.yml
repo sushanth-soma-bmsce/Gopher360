@@ -21,6 +21,19 @@ jobs:
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v2
 
+    - name: Retarget Project to Latest SDK
+      shell: powershell
+      run: |
+        # Update the vcxproj to use the latest Windows SDK available
+        $vcxprojPath = "Windows\Gopher\Gopher.vcxproj"
+        $content = Get-Content $vcxprojPath -Raw
+        
+        # Replace old SDK version with latest (22621)
+        $content = $content -replace '10\.0\.16299\.0', '10.0.22621.0'
+        
+        Set-Content -Path $vcxprojPath -Value $content
+        Write-Host "Updated Windows SDK version to 10.0.22621.0"
+
     - name: Build Solution
       run: |
         msbuild Windows/Gopher/Gopher.vcxproj /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }}
