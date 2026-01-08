@@ -21,6 +21,19 @@ jobs:
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v2
 
+    - name: Retarget Project to VS2022
+      shell: powershell
+      run: |
+        # Update the vcxproj to use VS2022 toolset (v143)
+        $vcxprojPath = "Windows\Gopher\Gopher.vcxproj"
+        $content = Get-Content $vcxprojPath -Raw
+        
+        # Replace v141 (VS2017) with v143 (VS2022)
+        $content = $content -replace '<PlatformToolset>v141</PlatformToolset>', '<PlatformToolset>v143</PlatformToolset>'
+        
+        Set-Content -Path $vcxprojPath -Value $content
+        Write-Host "Updated Platform Toolset to v143 (VS2022)"
+
     - name: Build Solution
       run: |
         msbuild Windows/Gopher/Gopher.vcxproj /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }} /p:WindowsTargetPlatformVersion= /p:DesktopCompatVersion=true
