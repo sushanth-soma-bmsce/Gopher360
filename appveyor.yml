@@ -27,7 +27,7 @@ build:
   verbosity: minimal
 
 after_build:
-  - ps: Copy-Item "Windows\Gopher\Win32\Release\Gopher360.exe" -Destination "Gopher360.exe"
+  - ps: Copy-Item "Windows\Gopher\Release\Gopher360.exe" -Destination "Gopher360.exe"
 
 artifacts:
   - path: Gopher360.exe
