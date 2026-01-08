@@ -8,6 +8,20 @@ platform:
 configuration:
   - Release
 
+before_build:
+  - ps: |
+      $vcxprojPath = "Windows\Gopher\Gopher.vcxproj"
+      $content = Get-Content $vcxprojPath -Raw
+      
+      # Replace v141 with v143
+      $content = $content -replace '<PlatformToolset>v141</PlatformToolset>', '<PlatformToolset>v143</PlatformToolset>'
+      
+      # Remove specific SDK version requirement
+      $content = $content -replace '<WindowsTargetPlatformVersion>10\.0\.16299\.0</WindowsTargetPlatformVersion>', ''
+      
+      Set-Content -Path $vcxprojPath -Value $content
+      Write-Host "Updated project configuration"
+
 build:
   project: Windows/Gopher/Gopher.vcxproj
   verbosity: minimal
