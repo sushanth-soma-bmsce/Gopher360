@@ -1,0 +1,31 @@
+version: 1.0.{build}
+
+image: Visual Studio 2022
+
+platform:
+  - Win32
+
+configuration:
+  - Release
+
+build:
+  project: Windows/Gopher/Gopher.vcxproj
+  verbosity: minimal
+
+after_build:
+  - ps: Copy-Item "Windows\Gopher\Win32\Release\Gopher360.exe" -Destination "Gopher360.exe"
+
+artifacts:
+  - path: Gopher360.exe
+    name: Gopher360
+
+deploy:
+  provider: GitHub
+  auth_token:
+    secure: YOUR_GITHUB_TOKEN_HERE
+  artifact: Gopher360
+  draft: false
+  prerelease: false
+  on:
+    branch: main
+    appveyor_repo_tag: true
