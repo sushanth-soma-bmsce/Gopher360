@@ -27,7 +27,9 @@ build:
   verbosity: minimal
 
 after_build:
-  - ps: Copy-Item "Windows\Gopher\Release\Gopher360.exe" -Destination "Gopher360.exe"
+  - ps: |
+      Copy-Item "Windows\Gopher\Release\Gopher360.exe" -Destination "Gopher360.exe"
+      Copy-Item "Configs\config_default.ini" -Destination "config.ini"
 
 artifacts:
   - path: Gopher360.exe
